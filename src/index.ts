@@ -6,7 +6,7 @@ import { IDocumentWidget } from '@jupyterlab/docregistry';
 
 // import { IMainMenu } from '@jupyterlab/mainmenu';
 
-import { GzippedDocumentViewerFactory } from './widget';
+import { GzippedDocumentWidgetFactory } from './widget';
 
 import '../style/index.css';
 
@@ -26,7 +26,7 @@ function activate(app: JupyterLab, restorer: ILayoutRestorer): void {
       extensions: ['.gz']
     });
     
-    const factory = new GzippedDocumentViewerFactory({
+    const factory = new GzippedDocumentWidgetFactory({
       name: FACTORY_GZ,
       modelName: 'base64',
       fileTypes: ['gz'],

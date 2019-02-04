@@ -1,37 +1,34 @@
-import { Widget /*, PanelLayout */} from '@phosphor/widgets';
+import { Widget, PanelLayout } from '@phosphor/widgets';
 
 import { ABCWidgetFactory, DocumentWidget, DocumentRegistry } from '@jupyterlab/docregistry';
 
-// import { CSVViewer, CSVViewerFactory } from '@jupyterlab/csvviewer';
+import { CSVViewer } from '@jupyterlab/csvviewer';
 
 import { gunzipSync } from 'zlib';
 
-// const MIME_TYPE = 'application/x-gzip';
-
-export class GzippedDocumentViewer extends Widget {
+export class GzippedDocumentWidget extends Widget {
 	// private _mimeType: string;
-	private _contents: string;
+	// private _contents: string;
 
 	constructor(context: DocumentRegistry.Context) {
 		super();
 		console.log('constructor()');
-
-		console.log(context);
 		context.ready.then(() => {
 			(window as any).context = context;
-			console.log(context);
 			const buf = Buffer.from(context.model.toString(), 'base64');
-			this._contents = gunzipSync(buf).toString();
-			console.log(this._contents);
+			const value = gunzipSync(buf).toString();
+			context.model.fromString(value);			
+
+		    const layout = (this.layout = new PanelLayout());
+		    const viewer = new CSVViewer({ context });
+		    layout.addWidget(viewer);
 		});
 	}
-
-
 }
 
-export class GzippedDocumentViewerFactory extends ABCWidgetFactory<DocumentWidget> {
+export class GzippedDocumentWidgetFactory extends ABCWidgetFactory<DocumentWidget> {
 	createNewWidget(context: DocumentRegistry.Context): DocumentWidget {
-		const content = new GzippedDocumentViewer(context);
+		const content = new GzippedDocumentWidget(context);
 		return new DocumentWidget({ content, context});
 	}
 }
