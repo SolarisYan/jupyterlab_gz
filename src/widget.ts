@@ -1,4 +1,4 @@
-import { BoxPanel } from '@phosphor/widgets';
+import { Widget, BoxPanel, BoxLayout } from '@phosphor/widgets';
 
 import { ABCWidgetFactory, DocumentWidget, DocumentRegistry } from '@jupyterlab/docregistry';
 
@@ -56,15 +56,15 @@ export namespace GzippedDocumentWidgetFactory {
 
 /**
  * DocumentWidget for Gzipped Document.
- * Holds GzippedDocumentViewer as its sole child.
+ * Replaces its content with appropriate document widget when the context becomes ready.
  */
-export class GzippedDocumentWidget extends DocumentWidget<GzippedDocumentViewer> {
+export class GzippedDocumentWidget extends DocumentWidget<DocumentWidget> {
 	constructor(
 		context: DocumentRegistry.Context, 
 		factory: DocumentRegistry.WidgetFactory,
 		fileType: DocumentRegistry.IFileType | null) {
-		const content = new GzippedDocumentViewer();
-		super({ content, context });
+		// add dummy content
+		super({ content: new Widget(), context });
 		// remove default toolbar as the viewer widget will have another
 		this.layout.removeWidget(this.toolbar);
 
@@ -73,32 +73,16 @@ export class GzippedDocumentWidget extends DocumentWidget<GzippedDocumentViewer>
 		this.title.iconLabel = fileType.iconLabel;
 
 		context.ready.then(() => {
-			// decode BASE64 and gzip
+			// replace context's model after decoding BASE64 and gzip
 			const buf = Buffer.from(context.model.toString(), 'base64');
 			context.model.fromString(gunzipSync(buf).toString());
 			// disable autosave
 			context.model.dirty = false;
 
-			content.setViewer(context, factory);
+			// replace content
+			const content = factory.createNew(context);
+			this.layout.removeWidget(this.content);
+			(this.layout as BoxLayout).addWidget(content);
 		});
 	}
 }
-
-/**
- * Viewer for Gzipped file.
- */
-export class GzippedDocumentViewer extends BoxPanel {
-	constructor() {
-		super({ spacing: 0 });
-		this.addClass(CSV_CLASS_VIEWER);
-	}
-
-	/**
-	 * Instantiates viewer widget using the given factory
-	 */
-	setViewer(context: DocumentRegistry.Context, factory: DocumentRegistry.WidgetFactory) {
-		const viewer = factory.createNew(context);
-		this.addWidget(viewer);
-	}
-}
-
