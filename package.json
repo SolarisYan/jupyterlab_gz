@@ -1,0 +1,48 @@
+{
+  "name": "jupyterlab_csvgz",
+  "version": "0.1.0",
+  "description": "A JupyterLab extension.",
+  "keywords": [
+    "jupyter",
+    "jupyterlab",
+    "jupyterlab-extension"
+  ],
+  "homepage": "",
+  "bugs": {
+    "url": ""
+  },
+  "license": "BSD-3-Clause",
+  "author": "Jin, Heonkyu",
+  "files": [
+    "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
+    "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "rimraf lib",
+    "prepare": "npm run clean && npm run build",
+    "watch": "tsc -w"
+  },
+  "dependencies": {
+    "@jupyterlab/application": "^0.19.1",
+    "@jupyterlab/apputils": "^0.19.1",
+    "@jupyterlab/csvviewer": "^0.19.1",
+    "@jupyterlab/csvviewer-extension": "^0.19.1",
+    "@jupyterlab/mainmenu": "^0.8.1",
+    "@types/node": "^10.12.21",
+    "zlib": "^1.0.5"
+  },
+  "devDependencies": {
+    "rimraf": "^2.6.1",
+    "typescript": "~3.1.1"
+  },
+  "jupyterlab": {
+    "extension": true
+  }
+}
