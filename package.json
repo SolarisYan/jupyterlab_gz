@@ -1,7 +1,7 @@
 {
-  "name": "jupyterlab_csvgz",
+  "name": "jupyterlab_gz",
   "version": "0.1.0",
-  "description": "A JupyterLab extension.",
+  "description": "A JupyterLab extension which reads gzipped file's content",
   "keywords": [
     "jupyter",
     "jupyterlab",
@@ -12,7 +12,7 @@
     "url": ""
   },
   "license": "BSD-3-Clause",
-  "author": "Jin, Heonkyu",
+  "author": "Jin, Heonkyu <heonkyu.jin@gmail.com>",
   "files": [
     "lib/**/*.{d.ts,eot,gif,html,jpg,js,js.map,json,png,svg,woff2,ttf}",
     "style/**/*.{css,eot,gif,html,jpg,json,png,svg,woff2,ttf}"
