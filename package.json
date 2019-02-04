@@ -1,7 +1,7 @@
 {
-  "name": "jupyterlab_gz",
+  "name": "@hkjinlee/jupyterlab_gz",
   "version": "0.1.0",
-  "description": "A JupyterLab extension which reads gzipped file's content",
+  "description": "JupyterLab extension for reading gzipp'ed file",
   "keywords": [
     "jupyter",
     "jupyterlab",
