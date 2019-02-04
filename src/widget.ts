@@ -1,34 +1,64 @@
-import { Widget, PanelLayout } from '@phosphor/widgets';
+import { BoxPanel } from '@phosphor/widgets';
 
 import { ABCWidgetFactory, DocumentWidget, DocumentRegistry } from '@jupyterlab/docregistry';
 
-import { CSVViewer } from '@jupyterlab/csvviewer';
-
 import { gunzipSync } from 'zlib';
 
-export class GzippedDocumentWidget extends Widget {
-	// private _mimeType: string;
-	// private _contents: string;
+import { stripGzExtension } from './util';
 
-	constructor(context: DocumentRegistry.Context) {
-		super();
-		console.log('constructor()');
+const CSV_CLASS = 'jp-GZViewer';
+
+export class GzippedDocumentWidgetFactory extends ABCWidgetFactory<DocumentWidget> {
+	constructor(options: GzippedDocumentWidgetFactory.IOptions) {
+		super(options);
+		this._docRegistry = options.docRegistry;
+	}
+
+	createNewWidget(context: DocumentRegistry.Context): DocumentWidget {
+		const path = stripGzExtension(context.path);
+		console.log(`path = ${path}`);
+		const factory = this._docRegistry.defaultWidgetFactory(path);
+
+		return new GzippedDocumentWidget(context, factory);
+	}
+
+	private _docRegistry: DocumentRegistry;
+}
+
+export namespace GzippedDocumentWidgetFactory {
+	export interface IOptions extends DocumentRegistry.IWidgetFactoryOptions {
+		docRegistry: DocumentRegistry
+	}
+}
+
+export class GzippedDocumentWidget extends DocumentWidget {
+	constructor(context: DocumentRegistry.Context, factory: DocumentRegistry.WidgetFactory) {
+		const content = new GzippedDocumentViewer();
+		super({ content, context });
+
+		this.addClass(CSV_CLASS);
+		(window as any).gz = this;
+
 		context.ready.then(() => {
 			(window as any).context = context;
-			const buf = Buffer.from(context.model.toString(), 'base64');
-			const value = gunzipSync(buf).toString();
-			context.model.fromString(value);			
 
-		    const layout = (this.layout = new PanelLayout());
-		    const viewer = new CSVViewer({ context });
-		    layout.addWidget(viewer);
+			const buf = Buffer.from(context.model.toString(), 'base64');
+			context.model.fromString(gunzipSync(buf).toString());	
+			context.model.dirty = false;
+
+			content.setViewer(context, factory);
 		});
 	}
 }
 
-export class GzippedDocumentWidgetFactory extends ABCWidgetFactory<DocumentWidget> {
-	createNewWidget(context: DocumentRegistry.Context): DocumentWidget {
-		const content = new GzippedDocumentWidget(context);
-		return new DocumentWidget({ content, context});
+export class GzippedDocumentViewer extends BoxPanel {
+	constructor() {
+		super();
+	}
+
+	setViewer(context: DocumentRegistry.Context, factory: DocumentRegistry.WidgetFactory) {
+		const viewer = factory.createNew(context);
+		this.addWidget(viewer);
 	}
 }
+
