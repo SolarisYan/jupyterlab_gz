@@ -10,7 +10,7 @@ A gzip extension for JupyterLab.
 ## Installation
 
 ```bash
-jupyter labextension install jupyterlab_gz
+jupyter labextension install @hkjinlee/jupyterlab_gz
 ```
 
 ## Development
@@ -30,3 +30,6 @@ npm run build
 jupyter lab build
 ```
 
+## TODO
+
+- Preview of big gzipped file, if possible
