@@ -1,12 +1,10 @@
-import { Widget, BoxPanel, BoxLayout } from '@phosphor/widgets';
+import { Widget, BoxLayout } from '@phosphor/widgets';
 
 import { ABCWidgetFactory, DocumentWidget, DocumentRegistry } from '@jupyterlab/docregistry';
 
 import { gunzipSync } from 'zlib';
 
 const CSV_CLASS_WIDGET = 'jp-GZWidget';
-
-const CSV_CLASS_VIEWER = 'jp-GZViewer'
 
 /**
  * Strips '.gz' from the path to transform 'foo.csv.gz' to 'foo.csv'
@@ -58,7 +56,7 @@ export namespace GzippedDocumentWidgetFactory {
  * DocumentWidget for Gzipped Document.
  * Replaces its content with appropriate document widget when the context becomes ready.
  */
-export class GzippedDocumentWidget extends DocumentWidget<DocumentWidget> {
+export class GzippedDocumentWidget extends DocumentWidget {
 	constructor(
 		context: DocumentRegistry.Context, 
 		factory: DocumentRegistry.WidgetFactory,
