@@ -4,7 +4,9 @@ import { ABCWidgetFactory, DocumentWidget, DocumentRegistry } from '@jupyterlab/
 
 import { gunzipSync } from 'zlib';
 
-const CSV_CLASS = 'jp-GZViewer';
+const CSV_CLASS_WIDGET = 'jp-GZWidget';
+
+const CSV_CLASS_VIEWER = 'jp-GZViewer'
 
 /**
  * Strips '.gz' from the path to transform 'foo.csv.gz' to 'foo.csv'
@@ -56,15 +58,17 @@ export namespace GzippedDocumentWidgetFactory {
  * DocumentWidget for Gzipped Document.
  * Holds GzippedDocumentViewer as its sole child.
  */
-export class GzippedDocumentWidget extends DocumentWidget {
+export class GzippedDocumentWidget extends DocumentWidget<GzippedDocumentViewer> {
 	constructor(
 		context: DocumentRegistry.Context, 
 		factory: DocumentRegistry.WidgetFactory,
 		fileType: DocumentRegistry.IFileType | null) {
 		const content = new GzippedDocumentViewer();
 		super({ content, context });
+		// remove default toolbar as the viewer widget will have another
+		this.layout.removeWidget(this.toolbar);
 
-		this.addClass(CSV_CLASS);
+		this.addClass(CSV_CLASS_WIDGET);
 		this.title.iconClass = fileType.iconClass;
 		this.title.iconLabel = fileType.iconLabel;
 
@@ -85,7 +89,8 @@ export class GzippedDocumentWidget extends DocumentWidget {
  */
 export class GzippedDocumentViewer extends BoxPanel {
 	constructor() {
-		super();
+		super({ spacing: 0 });
+		this.addClass(CSV_CLASS_VIEWER);
 	}
 
 	/**
