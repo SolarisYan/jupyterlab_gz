@@ -6,18 +6,17 @@ import { IDocumentWidget } from '@jupyterlab/docregistry';
 
 import { GzippedDocumentWidgetFactory } from './widget';
 
-import { stripGzExtension } from './util';
-
 import '../style/index.css';
 
 const FACTORY_GZ = 'Gzipped Document Viewer';
 
 const MIME_TYPE = 'application/gzip';
 
+/**
+ * Extension activation callback
+ */
 function activate(app: JupyterLab, restorer: ILayoutRestorer): void {
-	console.log('JupyterLab extension jupyterlab_gz is activated!');
-	(window as any).app = app;
-
+	// Adds gz filetype
 	app.docRegistry.addFileType({
 		name: 'gz',
 		displayName: 'Gzip',
@@ -26,6 +25,7 @@ function activate(app: JupyterLab, restorer: ILayoutRestorer): void {
 		extensions: ['.gz']
 	});
 	
+	// Creates widget factory
 	const factory = new GzippedDocumentWidgetFactory({
 		name: FACTORY_GZ,
 		modelName: 'base64',
@@ -34,7 +34,6 @@ function activate(app: JupyterLab, restorer: ILayoutRestorer): void {
 		readOnly: true,
 		docRegistry: app.docRegistry
 	});
-
 	app.docRegistry.addWidgetFactory(factory);
 
 	const tracker = new InstanceTracker<IDocumentWidget>({
@@ -55,13 +54,6 @@ function activate(app: JupyterLab, restorer: ILayoutRestorer): void {
 		widget.id = widget.id || `gz-${++id}`;
 
 		tracker.add(widget);
-		
-		const path_stripped = stripGzExtension(widget.context.path);
-		const types = app.docRegistry.getFileTypesForPath(path_stripped);
-		if (types.length > 0) {
-			widget.title.iconClass = types[0].iconClass;
-			widget.title.iconLabel = types[0].iconLabel;
-		}
 	})
 }
 
