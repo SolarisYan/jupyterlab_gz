@@ -1,6 +1,6 @@
-# jupyterlab_csvgz
+# jupyterlab_gz
 
-A JupyterLab extension.
+A gzip extension for JupyterLab.
 
 
 ## Prerequisites
@@ -10,7 +10,7 @@ A JupyterLab extension.
 ## Installation
 
 ```bash
-jupyter labextension install jupyterlab_csvgz
+jupyter labextension install jupyterlab_gz
 ```
 
 ## Development

@@ -7,9 +7,9 @@
     "jupyterlab",
     "jupyterlab-extension"
   ],
-  "homepage": "",
+  "homepage": "https://github.com/hkjinlee/jupyterlab_gz",
   "bugs": {
-    "url": ""
+    "url": "https://github.com/hkjinlee/jupyterlab_gz/issues"
   },
   "license": "BSD-3-Clause",
   "author": "Jin, Heonkyu <heonkyu.jin@gmail.com>",
@@ -21,7 +21,7 @@
   "types": "lib/index.d.ts",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/hkjinlee/jupyterlab_gz.git"
   },
   "scripts": {
     "build": "tsc -b",
@@ -32,9 +32,8 @@
   "dependencies": {
     "@jupyterlab/application": "^0.19.1",
     "@jupyterlab/apputils": "^0.19.1",
-    "@jupyterlab/csvviewer": "^0.19.1",
-    "@jupyterlab/csvviewer-extension": "^0.19.1",
-    "@jupyterlab/mainmenu": "^0.8.1",
+    "@jupyterlab/docregistry": "^0.19.1",
+    "@phosphor/widgets": "^1.6.0",
     "@types/node": "^10.12.21",
     "zlib": "^1.0.5"
   },
