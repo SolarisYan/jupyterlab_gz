@@ -9,7 +9,8 @@ import { gunzipSync } from 'zlib';
 // const MIME_TYPE = 'application/x-gzip';
 
 export class GzippedDocumentViewer extends Widget {
-	private _mimeType: string;
+	// private _mimeType: string;
+	private _contents: string;
 
 	constructor(context: DocumentRegistry.Context) {
 		super();
@@ -17,13 +18,15 @@ export class GzippedDocumentViewer extends Widget {
 
 		console.log(context);
 		context.ready.then(() => {
+			(window as any).context = context;
 			console.log(context);
-			const contents = context.contentsModel;
-			this._mimeType = contents.mimetype;
-			console.log(this._mimeType);
-			console.log(gunzipSync(context.model.toString()));
+			const buf = Buffer.from(context.model.toString(), 'base64');
+			this._contents = gunzipSync(buf).toString();
+			console.log(this._contents);
 		});
 	}
+
+
 }
 
 export class GzippedDocumentViewerFactory extends ABCWidgetFactory<DocumentWidget> {
