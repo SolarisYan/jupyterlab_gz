@@ -56,6 +56,13 @@ function activate(app: JupyterLab, restorer: ILayoutRestorer): void {
       widget.id = widget.id || `gz-${++id}`;
 
       tracker.add(widget);
+  
+      const without_gz = widget.context.path.replace(/\.gz$/, '');
+      const types = app.docRegistry.getFileTypesForPath(without_gz);
+      if (types.length > 0) {
+        widget.title.iconClass = types[0].iconClass;
+        widget.title.iconLabel = types[0].iconLabel;
+      }
     })
 }
 
